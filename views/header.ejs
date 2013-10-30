@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	
+	<title>eclo watch</title>
+	
+	<% include include.ejs %>
+
+</head>
+
+<body style="padding-top: 70px;">
+
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="container">
+			
+
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">eclo watch</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav">
+					<li <%= (active == "systems") ? "class=active" : "" %>><a href="/systems">Systems</a></li>
+					<li <%= (active == "map") ? "class=active" : "" %>><a href="/map">Map</a></li>
+					<li <%= (active == "alerts") ? "class=active" : "" %>>
+						<a href="/alerts">
+							Alerts
+							<% if ( alerts_count > 0 ) { %>
+								<span class="label label-danger"><%= alerts_count %></span>
+							<% } %>
+						</a>
+					</li>
+				</ul>
+				<form class="navbar-form navbar-right" method="post" action="/signout">
+					<button class="btn btn-default btn-sm pull-right" type="submit">
+						<span class="glyphicon icon-signout"></span> Sign out
+					</button>
+				</form>
+			</div><!-- /.navbar-collapse -->
+
+		</div>
+	</nav>

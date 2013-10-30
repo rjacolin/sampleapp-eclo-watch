@@ -1,0 +1,28 @@
+<%- include header.ejs %>
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<table class="table table-hover table-striped">
+				<!-- <tr><th>Name</th><th>Temperature</th><th>Humidity</th><th>Luminosity</th><th>Last Com</th></tr> -->
+				<% for(var i=0; i<systems.length; i++) { %>
+				<tr class="<%= systems[i].alerts ? 'danger' : '' %>">
+				<tr>
+					<td><a href="/systems/details?uid=<%= systems[i].uid %>"><%= systems[i].name %></a></td>
+					<td><%= ("temperature" in systems[i]) ? parseFloat(systems[i].temperature).toFixed(2)+' °C' : 'none' %></td>
+					<td><%= ("humidity" in systems[i]) ? parseFloat(systems[i].humidity).toFixed(2)+' %' : 'none' %></td>
+					<td><%= ("luminosity" in systems[i]) ? parseFloat(systems[i].luminosity).toFixed(2)+' Lux' : 'none' %></td>
+					 <td>
+						<% if ("alerts_count" in systems[i]) { %>
+							<span class="label label-danger"><%= systems[i].alerts_count %> alert(s)</span>
+						<% } else { %>
+							<span class="label label-default">no alert</span>
+						<% } %>
+					</td>
+					<td><%= new Date(systems[i].lastCommDate).toString() %></td>
+				</tr>
+				<% } %>
+			</table>
+		</div>
+	</div>
+</div>
+<%- include footer.ejs %>
