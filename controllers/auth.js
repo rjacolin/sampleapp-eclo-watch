@@ -29,7 +29,7 @@ var client_secret = "MY_CLIENT_SECRET";
             "refresh_token": req.session.refresh_token,
             "client_id" : client_id,
             "client_secret": client_secret
-        }
+        };
 
         airvantage.token_query(options)(function(err, res) {
             if (err) {
@@ -66,7 +66,7 @@ exports.signin.post = function(req, resp, next) {
         "password": req.body.password,
         "client_id" : client_id,
         "client_secret": client_secret
-    }
+    };
 
     airvantage.token_query(options)(function(err, res) {
         if (err) {

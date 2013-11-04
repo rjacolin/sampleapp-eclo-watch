@@ -22,7 +22,7 @@ exports.get = function(req, resp) {
         } else {
 
             // count number of not acknowled alerts
-            var alerts_count = _.size(_.reject(res.alerts.items, function(alert){return alert.acknowledgedAt}));
+            var alerts_count = _.size(_.reject(res.alerts.items, function(alert){return alert.acknowledgedAt;}));
 
             // attach alerts to their system
             var alerts = _.groupBy(res.alerts.items, 'target');
@@ -30,7 +30,7 @@ exports.get = function(req, resp) {
             var systems = _.map(res.systems.items, function(system) {
                 var a = alerts[system.uid];
                 if (a) {
-                    var alerts_count = _.size(_.reject(a, function(alert){return alert.acknowledgedAt}));
+                    var alerts_count = _.size(_.reject(a, function(alert){return alert.acknowledgedAt;}));
                     
                     if (alerts_count > 0) system.alerts_count = alerts_count;
 

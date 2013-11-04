@@ -37,7 +37,7 @@ var query_get_ctor = function (host, base, url){
                 resp.on('end', function(){
                     var err = null, res = null;
                     if (resp.statusCode != 200){
-                        err="Status Code " + resp.statusCode
+                        err="Status Code " + resp.statusCode;
                         callback(err,res);
                     } else {
                         try{
@@ -84,7 +84,7 @@ var query_post_ctor = function (host, base, url){
                 resp.on('end', function(){
                     var err = null, res = null;
                     if (resp.statusCode != 200){
-                        err="Status Code " + resp.statusCode
+                        err="Status Code " + resp.statusCode;
                         callback(err,res);
                     } else {
                         try{

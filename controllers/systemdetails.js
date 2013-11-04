@@ -35,9 +35,9 @@ exports.get = function(req, resp) {
             // attach alerts to their system
             system.alerts = _.groupBy(res.alerts.items, 'target')[uid] || [];
 
-            system.temperature = _.sortBy(_.map(res.temperature, convert), function(val){return val.x});
-            system.luminosity  = _.sortBy(_.map(res.luminosity, convert), function(val){return val.x});
-            system.humidity    = _.sortBy(_.map(res.humidity, convert), function(val){return val.x});
+            system.temperature = _.sortBy(_.map(res.temperature, convert), function(val){return val.x;});
+            system.luminosity  = _.sortBy(_.map(res.luminosity, convert), function(val){return val.x;});
+            system.humidity    = _.sortBy(_.map(res.humidity, convert), function(val){return val.x;});
 
             // render the page
             resp.render('systemdetails', {

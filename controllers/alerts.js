@@ -21,7 +21,7 @@ exports.get = function(req, resp) {
             var alerts = res.items;
 
             // count alert not aknowledged
-            var alerts_count = _.size(_.reject(alerts, function(alert){return alert.acknowledgedBy}));
+            var alerts_count = _.size(_.reject(alerts, function(alert){return alert.acknowledgedBy;}));
 
             // render the page
             resp.render('alerts', {
