@@ -18,24 +18,21 @@ exports.get = function(req, resp) {
              async.waterfall, [
                  airvantage.systems_query({fields : "uid,name,lastCommDate",access_token : req.session.access_token}),
                  function(systems, callback){
-                     async.map(systems.items, function(system, cb){                         
-                         airvantage.data_query({uid : system.uid, ids : "greenhouse.temperature,greenhouse.luminosity,greenhouse.humidity", access_token : req.session.access_token})
-                             (function(err, data) {
-                                if (data) {
-                                    if ("greenhouse.temperature" in data && data["greenhouse.temperature"] !== null) {
-                                        system.temperature = data["greenhouse.temperature"][0].value;
-                                    }
-                                    if ("greenhouse.luminosity" in data && data["greenhouse.luminosity"] !== null) {
-                                        system.luminosity = data["greenhouse.luminosity"][0].value;
-                                    }
-                                    if ("greenhouse.humidity" in data && data["greenhouse.humidity"] !== null) {
-                                        system.humidity = data["greenhouse.humidity"][0].value;
-                                    };
-                                }
-                                console.log(system);
-                                cb(err, system);
-                             });
-                     }, callback);
+                	 airvantage.data_raw_query(
+	                		{targetIds : _.reduce(systems.items,function(memo, system) {return memo+system.uid+",";},""),
+	                		dataIds : "greenhouse.temperature,greenhouse.luminosity,greenhouse.humidity",
+	                		size : 1,
+	                		access_token : req.session.access_token}
+	                )(function(err, data) {
+	                      if (data) {
+	                    	  _.each(systems.items, function (system){
+	                    		  system.temperature = getDataValue(data[system.uid]["greenhouse.temperature"]);
+	                    		  system.luminosity = getDataValue(data[system.uid]["greenhouse.luminosity"]);
+	                    		  system.humidity = getDataValue(data[system.uid]["greenhouse.humidity"]);
+	                    	  });
+	                      }
+	                      callback(err, systems);
+	               });
                  }
             ]
          ),
@@ -45,16 +42,15 @@ exports.get = function(req, resp) {
     function(err, res) {
         if (err) {
             console.log("ERR: " + err);
-            next(err);
         } else {
-
+        	
             // count number of not acknowled alerts
             var alerts_count = _.size(_.reject(res.alerts.items, function(alert){return alert.acknowledgedAt;}));
 
             // attach alerts to their system
             var alerts = _.groupBy(res.alerts.items, 'target');
 
-            var systems = _.map(res.systems, function(system) {
+            var systems = _.map(res.systems.items, function(system) {
                 var a = alerts[system.uid];
                 if (a) {
                     var alerts_count = _.size(_.reject(a, function(alert){return alert.acknowledgedAt;}));
@@ -73,3 +69,12 @@ exports.get = function(req, resp) {
     });
 
 };
+
+function getDataValue(data){
+	//Remove the timestamp from elements
+	data = _.map(data ,function (v){return v;});
+	
+	//get the last data value 
+	return data[0].value;
+}
+

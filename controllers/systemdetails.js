@@ -14,17 +14,16 @@ exports.get = function(req, resp) {
     async.parallel({
         // get system info
         system : airvantage.systems_query({uid: uid, fields : "uid,name", access_token : req.session.access_token}),
-        // get last 100 datapoints
-        temperature : airvantage.data_raw_query({uid: uid, path:"greenhouse.temperature", size: 500, access_token : req.session.access_token}),
-        luminosity  : airvantage.data_raw_query({uid: uid, path:"greenhouse.luminosity", size: 500, access_token : req.session.access_token}),
-        humidity    : airvantage.data_raw_query({uid: uid, path:"greenhouse.humidity", size: 500, access_token : req.session.access_token}),
+        datas : airvantage.data_raw_query({uid: uid, targetIds: uid, dataIds:"greenhouse.temperature,greenhouse.humidity,greenhouse.luminosity", size: 500, access_token : req.session.access_token}),
+        
         // get all alerts
         alerts : airvantage.alerts_query({access_token : req.session.access_token}) 
+        
+        
     },
     function(err, res) {
         if (err) {
             console.log("ERR: " + err);
-            next(err);
         } else {
 
             // count number of not acknowled alerts
@@ -34,10 +33,11 @@ exports.get = function(req, resp) {
 
             // attach alerts to their system
             system.alerts = _.groupBy(res.alerts.items, 'target')[uid] || [];
-
-            system.temperature = _.sortBy(_.map(res.temperature, convert), function(val){return val.x;});
-            system.luminosity  = _.sortBy(_.map(res.luminosity, convert), function(val){return val.x;});
-            system.humidity    = _.sortBy(_.map(res.humidity, convert), function(val){return val.x;});
+            
+            //attach datas to system
+            system.temperature = changeformat(res.datas[uid]["greenhouse.temperature"]);
+            system.luminosity = changeformat(res.datas[uid]["greenhouse.luminosity"]);
+            system.humidity = changeformat(res.datas[uid]["greenhouse.humidity"]);
 
             // render the page
             resp.render('systemdetails', {
@@ -51,8 +51,13 @@ exports.get = function(req, resp) {
 
 };
 
-
-// helper function to convert val to plot coordinates
-var convert = function(val){
-    return {x:Math.floor(val.timestamp/1000), y:val.value}
+var changeformat = function (datalist){
+	//convert datapoint from {<timestamp> : {value : <value>}} to [{timestamp : <timestamp>, value : <value>}]
+	datalist =  _.map(datalist, function (v,k) {return { timestamp:k, value:v.value}});
+	
+	//convert datapoint to {x:<timestamp>/1000, y:<value>}
+	datalist = _.map(datalist, function(val){ return {x:Math.floor(val.timestamp/1000), y:val.value}});
+	
+	//sort elements by timestamp
+	return _.sortBy(datalist, function(val){return val.x;});
 }
