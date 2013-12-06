@@ -115,9 +115,6 @@ var apiurl = "/api/v1/";
 var authurl = "/api/oauth/";
 
 
-
-
-
 /** Get all systems */
 exports.systems_query = query_get_ctor(host, apiurl, "systems");
 
@@ -130,11 +127,11 @@ exports.alerts_ack = query_post_ctor(host, apiurl, "alerts/:uid/acknowledge");
 /** Get last data of a system */
 exports.data_query = query_get_ctor(host, apiurl, "systems/:uid/data");
 
+/** Get datas of a fleet of systems */
+exports.data_fleet_query = query_get_ctor(host, apiurl, "systems/data/fleet");
+
 /** Get raw datapoints of a system */
-exports.data_raw_query = query_get_ctor(host, apiurl, "systems/:uid/data/:path/raw");
+exports.data_raw_query = query_get_ctor(host, apiurl, "systems/data/raw");
 
 /** Get access token */
 exports.token_query = query_get_ctor(host, authurl, "token");
-
-
-

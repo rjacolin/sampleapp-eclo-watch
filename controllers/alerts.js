@@ -8,7 +8,7 @@ var async = require('async');
 
 
 
-exports.get = function(req, resp) {
+exports.get = function(req, resp, next) {
 
     //request alerts from AirVantage
     airvantage.alerts_query({"access_token": req.session.access_token})(function(err, res) {

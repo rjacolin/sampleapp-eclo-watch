@@ -10,7 +10,7 @@ var async = require('async');
 /**
  * Manage get request on systems.
  */
-exports.get = function(req, resp) {
+exports.get = function(req, resp, next) {
 
     async.parallel({
          // get all systems and their data         
@@ -26,9 +26,16 @@ exports.get = function(req, resp) {
 	                )(function(err, data) {
 	                      if (data) {
 	                    	  _.each(systems.items, function (system){
-	                    		  system.temperature = getDataValue(data[system.uid]["greenhouse.temperature"]);
-	                    		  system.luminosity = getDataValue(data[system.uid]["greenhouse.luminosity"]);
-	                    		  system.humidity = getDataValue(data[system.uid]["greenhouse.humidity"]);
+		                    	  var systemdata = data[system.uid];
+		                    	  if ("greenhouse.temperature" in systemdata && _.size(systemdata["greenhouse.temperature"]) !== 0) {
+		                    		  system.temperature = getDataValue(systemdata["greenhouse.temperature"]);
+		                    	  }
+		                    	  if ("greenhouse.luminosity" in systemdata && _.size(systemdata["greenhouse.luminosity"]) !== 0) {
+		                    		  system.luminosity = getDataValue(systemdata["greenhouse.luminosity"]);
+		                    	  }
+		                    	  if ("greenhouse.humidity" in systemdata && _.size(systemdata["greenhouse.humidity"]) !== 0) {
+		                    		  system.humidity = getDataValue(systemdata["greenhouse.humidity"]);
+		                    	  }
 	                    	  });
 	                      }
 	                      callback(err, systems);
@@ -42,6 +49,7 @@ exports.get = function(req, resp) {
     function(err, res) {
         if (err) {
             console.log("ERR: " + err);
+            next(err);
         } else {
         	
             // count number of not acknowled alerts
@@ -74,7 +82,7 @@ function getDataValue(data){
 	//Remove the timestamp from elements
 	data = _.map(data ,function (v){return v;});
 	
-	//get the last data value 
+	//get the last data value
 	return data[0].value;
 }
 

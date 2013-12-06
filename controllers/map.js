@@ -7,7 +7,7 @@ var airvantage = require('../model/airvantage');
 var _ = require('underscore');
 var async = require('async');
 
-exports.get = function(req, resp) {
+exports.get = function(req, resp, next) {
 
     async.parallel({
          // get all systems

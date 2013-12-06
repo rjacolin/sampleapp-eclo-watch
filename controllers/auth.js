@@ -22,7 +22,7 @@ var client_secret = "MY_CLIENT_SECRET";
     if (!req.session.access_token) {
         // to access-token, we go to the login page
         resp.redirect('/signin');
-    }else if (req.session.expires_at - 3600000 > new Date().getTime()){
+    }else if (req.session.expires_at - 3600000 < new Date().getTime()){
 
         var options = {
             "grant_type": "refresh_token", 
