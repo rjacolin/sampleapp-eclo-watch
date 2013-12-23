@@ -19,3 +19,11 @@ a {
   fill : #f0ad4e;
 }
 
+.company small {
+	font-size: 65%;
+	color: #A4A4A4;
+}
+
+.label-important {
+	font-size: 120%
+}

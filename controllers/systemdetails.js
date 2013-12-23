@@ -19,7 +19,6 @@ exports.get = function(req, resp, next) {
         // get all alerts
         alerts : airvantage.alerts_query({access_token : req.session.access_token}) 
         
-        
     },
     function(err, res) {
         if (err) {
@@ -53,11 +52,8 @@ exports.get = function(req, resp, next) {
 };
 
 var changeformat = function (datalist){
-	//convert datapoint from {<timestamp> : {value : <value>}} to [{timestamp : <timestamp>, value : <value>}]
-	datalist =  _.map(datalist, function (v,k) {return { timestamp:k, value:v.value};});
-	
 	//convert datapoint to {x:<timestamp>/1000, y:<value>}
-	datalist = _.map(datalist, function(val){ return {x:Math.floor(val.timestamp/1000), y:val.value};});
+	datalist = _.map(datalist, function(val){ return {x:Math.floor(val.ts/1000), y:val.v};});
 	
 	//convert string values into numbers for rickshaw
 	datalist = _.map(datalist, function (val) { if (Object.prototype.toString.call(val.y) === "[object String]") {val.y =  parseFloat(val.y); } return val; });

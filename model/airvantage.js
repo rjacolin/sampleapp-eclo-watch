@@ -110,7 +110,7 @@ var query_post_ctor = function (host, base, url){
 
 // AirVantage API, see API documentation.
 // ---------------------------------------
-var host = "na.airvantage.net";
+var host = "na.airvantage.net";	
 var apiurl = "/api/v1/";
 var authurl = "/api/oauth/";
 
@@ -132,6 +132,9 @@ exports.data_fleet_query = query_get_ctor(host, apiurl, "systems/data/fleet");
 
 /** Get raw datapoints of a system */
 exports.data_raw_query = query_get_ctor(host, apiurl, "systems/data/raw");
+
+/** Get current user */
+exports.current_user = query_get_ctor(host, apiurl, "users/current");
 
 /** Get access token */
 exports.token_query = query_get_ctor(host, authurl, "token");
