@@ -44,41 +44,8 @@ exports.get = function(req, resp, next) {
             ]
          ),
          // get all alerts
-         alerts : airvantage.alerts_query({fields : "uid,date,target,acknowledgedAt",access_token : req.session.access_token}),
+         alerts : airvantage.alerts_query({fields : "uid,date,target,acknowledgedAt",access_token : req.session.access_token})
          
-         //get company values 
-         user : async.apply(
-	             async.waterfall, [airvantage.current_user({access_token : req.session.access_token}),
-	                 function(user, callback){
-		            	 airvantage.data_fleet_query(
-	                		{targetIds : user.company.uid,
-	                		dataIds : "greenhouse.temperature,greenhouse.luminosity,greenhouse.humidity",
-	                		size : 10,
-	                		access_token : req.session.access_token}
-	                )(function(err, data) {
-	                      if (data) {
-	                    	  var companydata = data[user.company.uid];
-	                    	  user.company.timestamp = 9999999999999;
-	                    	  if ("greenhouse.temperature" in companydata && _.size(companydata["greenhouse.temperature"]) !== 0) {
-	                    		  var datapoint = getFirtDatapoint(companydata["greenhouse.temperature"]);
-	                    		  user.company.temperature = datapoint.v;
-	                    		  if (datapoint.ts < user.company.timestamp){ user.company.timestamp = datapoint.ts;}
-	                    	  }
-	                    	  if ("greenhouse.luminosity" in companydata && _.size(companydata["greenhouse.luminosity"]) !== 0) {
-	                    		  var datapoint = getFirtDatapoint(companydata["greenhouse.luminosity"]);
-	                    		  user.company.luminosity = datapoint.v;
-	                    		  if (datapoint.ts < user.company.timestamp){ user.company.timestamp = datapoint.ts;}
-	                    	  }
-	                    	  if ("greenhouse.humidity" in companydata && _.size(companydata["greenhouse.humidity"]) !== 0) {
-	                    		  var datapoint = getFirtDatapoint(companydata["greenhouse.humidity"]);
-	                    		  user.company.humidity = datapoint.v;
-	                    		  if (datapoint.ts < user.company.timestamp){ user.company.timestamp = datapoint.ts;}
-	                    	  }
-	                      }
-	                      callback(err, user);
-               });
-	         }
-         ])
     },
     function(err, res) {
         if (err) {
@@ -103,14 +70,10 @@ exports.get = function(req, resp, next) {
                 return system;
             });
             
-            //compute the alert count for the company
-            res.user.company.alerts_count = _.reduce(systems, function (sum, system) {console.log(system.alerts_count);return sum + system.alerts_count;}, 0);
-            
             // render the page
             resp.render('systems', {
                 alerts_count : alerts_count,
                 systems : systems,
-                company : res.user.company,
                 active : "systems"
             });
         }

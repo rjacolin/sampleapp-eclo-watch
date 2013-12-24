@@ -1,0 +1,18 @@
+<%- include header.ejs %>
+
+<div class="container">
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="page-header">
+				<h1><%= company.name %></h1>
+			</div>
+		</div>
+	</div>
+
+	<% data = company %>
+	<%- include triplegraph.ejs %>
+
+</div>
+
+<%- include footer.ejs %>

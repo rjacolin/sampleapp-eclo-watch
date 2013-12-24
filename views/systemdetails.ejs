@@ -16,19 +16,8 @@
 		</div>
 	</div>	
 
-	<div class="row triplegraph">
-		<div class="col-lg-12">
-			<div style="float: left;" id="axisContainer">
-				<span id="axis1"></span>
-				<span id="axis2"></span>
-				<span id="axis0"></span>
-			</div>
-			<div style="overflow:hidden;">
-				<div id="chart" class="rickshaw_graph" style="width: 100%;"></div>
-			</div>
-		</div>
-	</div>
-
+	<% data = system %>
+	<%- include triplegraph.ejs %>
 	
 	<div class="row">
 		<div class="col-lg-12">
@@ -58,101 +47,5 @@
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-
-var data = [<%- JSON.stringify(system.temperature) %>, <%- JSON.stringify(system.luminosity)%>, <%- JSON.stringify(system.humidity)%>];
-
-var palette = new Rickshaw.Color.Palette();
-
-var scales = _.map(data, function(vals){
-	var y = _.pluck(vals, "y");
-	var min = _.min(y);
-	var max = _.max(y);
-	if (min == max){ min = 0; max = max + 10;}
-	return d3.scale.linear().domain([min, max]).nice();
-});
-
-var graph = new Rickshaw.Graph({
-	element: document.querySelector("#chart"),
-	renderer: 'multi',
-	//interpolation: "linear",
-	width: $("#chart").width() - 129,
-	series: [{
-		name: "Luminosity",
-		data: data[1],
-		color: '#d9534f',
-		scale: scales[1],
-		renderer: "line"
-	},{
-		name: "Humidity",
-		data: data[2],
-		color: '#f0ad4e',
-		scale: scales[2],
-		renderer: "line"
-	},{
-		name: "Temperature",
-		data: data[0],
-		color: '#5cb85c',
-		scale: scales[0],
-		renderer: "line"
-	}]
-});
-
-
-//var time = new Rickshaw.Fixtures.Time();
-
-var xAxis = new Rickshaw.Graph.Axis.Time({
-	graph: graph,
-});
-
-//Luminosity
-new Rickshaw.Graph.Axis.Y.Scaled({
-	element: document.getElementById('axis1'),
-	graph: graph,
-	grid: false,
-	orientation: 'left',
-	height : 250,
-	width : 40,
-	scale: scales[1],
-	tickFormat: Rickshaw.Fixtures.Number.formatKMBT
-});
-
-//Humidity
-new Rickshaw.Graph.Axis.Y.Scaled({
-	element: document.getElementById('axis2'),
-	graph: graph,
-	grid: false,
-	orientation: 'left',
-	height : 250,
-	width : 40,
-	scale: scales[2],
-	tickFormat: Rickshaw.Fixtures.Number.formatKMBT
-});
-
-//Temperature
-new Rickshaw.Graph.Axis.Y.Scaled({
-	element: document.getElementById('axis0'),
-	graph: graph,
-	grid: true,
-	orientation: 'left',
-	height : 250,
-	width : 40,
-	scale: scales[0],
-	tickFormat: Rickshaw.Fixtures.Number.formatKMBT
-});
-
-var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-	graph: graph
-} );
-
-// var legend = new Rickshaw.Graph.Legend({
-// 	graph: graph,
-// 	element: document.querySelector('#graph')
-// });
-
-graph.render();
-
-</script>
 
 <%- include footer.ejs %>

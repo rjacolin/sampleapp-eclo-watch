@@ -1,50 +1,10 @@
 <%- include header.ejs %>
-<div class="jumbotron">
-  <div class="container">
-	<div class="row">
-		<div class="col-lg-12 company">
-   			<strong><%= company.name %></strong> Eclo greenhouses summary 
-   			<small><%= new Date(company.timestamp).toString() %></small>
-   		</div>
-		<div class="col-lg-3">
-			<center>
-				<span class="label label-default label-important">
-    			<%= ("temperature" in company) ? parseFloat(company.temperature).toFixed(2)+' °C' : 'none' %>
-    		</center>
-    	</div>
-		<div class="col-lg-3">
-			<center>
-				<span class="label label-default label-important">
-	    			<%= ("humidity" in company) ? parseFloat(company.humidity).toFixed(2)+' %' : 'none' %>
-	    		</span>
-	    	</center>
-	    </div>
-		<div class="col-lg-3">
-			<center>
-				<span class="label label-default label-important">
-					<%= ("luminosity" in company) ? parseFloat(company.luminosity).toFixed(2)+' Lux' : 'none' %>
-				</span>
-			</center>
-		</div>
-		<div class="col-lg-3">
-			<center>
-				<% if ("alerts_count" in company && company.alerts_count > 0) { %>
-					<span class="label label-danger label-important">
-						<%= company.alerts_count+' Alert(s)' %>	
-				<% } else { %>
-					<span class="label label-default label-important">
-						<%= 'No Alert' %>
-				<% } %>
-				</span>
-			</center>
-		</div>
-	</div>
-  </div>
-</div>
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12">
-			<strong>Eclo greenhouses details</strong>
+			<div class="page-header">
+				<h1>Eclo greenhouses</h1>
+			</div>
 		</div>	
 		<div class="col-lg-12">
 			<table class="table table-hover table-striped">

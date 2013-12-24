@@ -29,6 +29,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav">
+					<li <%= (active == "company") ? "class=active" : "" %>><a href="/company">Company</a></li>
 					<li <%= (active == "systems") ? "class=active" : "" %>><a href="/systems">Systems</a></li>
 					<li <%= (active == "map") ? "class=active" : "" %>><a href="/map">Map</a></li>
 					<li <%= (active == "alerts") ? "class=active" : "" %>>

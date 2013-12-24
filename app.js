@@ -9,7 +9,7 @@ var alerts  = require('./controllers/alerts');
 var systems  = require('./controllers/systems');
 var map     = require('./controllers/map');
 var systemdetails = require('./controllers/systemdetails');
-
+var company = require('./controllers/company');
 
 var app = express();
 
@@ -43,12 +43,13 @@ app.get('/signin', auth.signin.get);
 app.post('/signin', auth.signin.post);
 app.post('/signout', auth.signout.post);
 
-app.get('/', auth.check, function(req, res) {res.redirect('/systems');} );
+app.get('/', auth.check, function(req, res) {res.redirect('/company');} );
 app.get('/alerts',  auth.check, alerts.get);
 app.post('/alerts',  auth.check, alerts.post);
 app.get('/systems', auth.check, systems.get);
 app.get('/map', auth.check, map.get);
 app.get('/systems/details', auth.check, systemdetails.get);
+app.get('/company', auth.check, company.get);
 
 // create server
 // ---------------------------
