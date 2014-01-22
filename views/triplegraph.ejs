@@ -28,7 +28,7 @@ var scales = _.map(data, function(vals){
 var graph = new Rickshaw.Graph({
 	element: document.querySelector("#chart"),
 	renderer: 'multi',
-	//interpolation: "linear",
+	interpolation: "linear",
 	width: $("#chart").width() - 129,
 	series: [{
 		name: "Luminosity",
